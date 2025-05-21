@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="grid grid-cols-3 container max-w-lg mx-auto">
+    <div class="grid grid-cols-3 container max-w-lg mx-auto justify-center">
       <UButton class="h-20 justify-center text-5xl" label="1" />
       <UButton class="h-20 justify-center text-5xl" label="2" />
       <UButton class="h-20 justify-center text-5xl" label="3" />
@@ -10,7 +10,7 @@
       <UButton class="h-20 justify-center text-5xl" label="7" />
       <UButton class="h-20 justify-center text-5xl" label="8" />
       <UButton class="h-20 justify-center text-5xl" label="9" />
-      <UButton class="h-20 justify-center text-5xl" label="10" />
+      <UButton class="h-20 justify-center text-5xl" label="0" />
     </div>
     <div class="mx-auto container max-w-lg">
       <UButton label="Login" variant="outline" class="p-8" @click="login" />
