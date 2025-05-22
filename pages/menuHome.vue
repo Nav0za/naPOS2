@@ -1,6 +1,6 @@
 <template>
     <div>
-        <UButton label="back" @click="() => useRouter().back()" />
+        <BackBtn />
         <div class="grid grid-cols-3 container max-w-lg mx-auto">
             <div class="border p-5 rounded border-neutral-300" @click="() => useRouter().push('cashier')">
                 <label>คิดเงิน</label>

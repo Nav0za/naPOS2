@@ -2,28 +2,113 @@
     <div>
         <BackBtn />
         <div class="container max-w-7xl mx-auto flex flex-row justify-between">
-            <div class="border p-3 w-1/2">
-                <p>item</p>
-            </div>
-            <div class="w-1/2 border p-4">
-                <div v-if="cateSelectstate === ''" class="grid grid-cols-4">
-                    <div v-for="(cg, i) in category" :key="i" class="p-3 border border-neutral-300 rounded" @click="() => {
-                        cateSelectstate = cg.name
-                        console.log(cateSelectstate)
-                    }">
-                        <p>{{ cg.name }}</p>
-                    </div>
+            <div class="border p-3 w-1/2 flex flex-col justify-between gap-3">
+                <p v-for="item in bills()" :key="item.id">
+                    {{ item.name }} : {{ item.amount }} ({{ item.price }}) THB
+                </p>
+                <div class="border p-5">
+                    <p>Total: {{bills().reduce((sum, item) => sum + item.price, 0)}}</p>
                 </div>
-                <div v-else>
-                    <UButton label="Back" @click="cateSelectstate = ''" />
-                    <div v-for="item in category.filter(cate => cate.name === cateSelectstate)" :key="item.id"
-                        class="grid grid-cols-4">
-                        <div v-for="name in item.items" class="border p-3 border-neutral-300 rounded">
-                            <p>
-                                {{ name.name }}
-                            </p>
+            </div>
+            <div class="flex flex-col justify-between gap-4 w-1/2 border p-4">
+                <div v-if="checkOutstate === false">
+                    <div v-if="cateSelectstate === ''" class="grid grid-cols-4">
+                        <div v-for="(category, i) in proDucts" :key="i" class="p-3 border border-neutral-300 rounded"
+                            @click="() => {
+                                cateSelectstate = category.name
+                            }">
+                            <p>{{ category.name }}</p>
                         </div>
                     </div>
+                    <div v-else>
+                        <UButton label="Back" @click="cateSelectstate = ''" />
+                        <div v-for="item in proDucts.filter(cate => cate.name === cateSelectstate)" :key="item.id"
+                            class="grid grid-cols-4">
+                            <UButton v-for="name in item.items" :key="name.id" :label="name.name" variant="subtle"
+                                @click="addToBill(name.name, name.price)" />
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="flex flex-col">
+                    <div class="border-2 p-6">
+                        <span>{{ giveMoney }}</span>
+                    </div>
+                    <div class="p-0 grid grid-cols-3">
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="1" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('1')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="2" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('2')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="3" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('3')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="4" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('4')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="5" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('5')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="6" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('6')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="7" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('7')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="8" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('8')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="9" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('9')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="Delete" icon="i-lucide-arrow-left"
+                                class="w-full h-full py-5 justify-center" @click="deleteInput" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="0" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('0')" />
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <UButton variant="outline" label="Clear" class="w-full h-full py-5 justify-center"
+                                @click="clearInput" />
+                        </div>
+                        <p>{{ payOPtion }}</p>
+                        <div class="inline-flex rounded-md shadow-xs" role="group">
+                            <button type="button"
+                                class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700" @focus="payOPtion = 'Cash' ">
+                                Cash 
+                            </button>
+                            <button type="button"
+                                class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700" @focus="payOPtion = 'QR code' ">
+                                QR Code
+                            </button>
+                            <button type="button"
+                                class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700" @focus="payOPtion = 'Card' ">
+                                Card
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="checkOutstate === false">
+                    <UButton label="Checkout" @click="checkOutstate = true" />
+                </div>
+                <div v-else>
+                    <UButton label="Checkout" @click="checkOutstate = true" disabled />
+                    <UButton label="Back" color="neutral" variant="subtle" @click="() => {
+                        checkOutstate = false
+                        clearInput()
+                        cateSelectstate = ''
+                    }" />
                 </div>
             </div>
         </div>
@@ -31,98 +116,45 @@
 </template>
 
 <script setup>
+const proDucts = products()
 const cateSelectstate = ref('')
-const category = ref([
-    {
-        id: 1,
-        name: 'Hot',
-        items: [
-            {
-                id: 1,
-                name: 'Hot americano'
-            },
-            {
-                id: 2,
-                name: 'Hot latte'
-            },
-            {
-                id: 3,
-                name: 'Hot cappucino'
-            },
-            {
-                id: 4,
-                name: 'Hot mocha'
-            }
-        ]
-    },
-    {
-        id: 2,
-        name: 'Iced',
-        items: [
-            {
-                id: 1,
-                name: 'Iced americano'
-            },
-            {
-                id: 2,
-                name: 'Iced latte'
-            },
-            {
-                id: 3,
-                name: 'Iced cappucino'
-            },
-            {
-                id: 4,
-                name: 'Iced mocha'
-            }
-        ]
-    },
-    {
-        id: 3,
-        name: 'Frappe',
-        items: [
-            {
-                id: 1,
-                name: 'Coffee frappe'
-            },
-            {
-                id: 2,
-                name: 'Mocha frappe'
-            },
-            {
-                id: 3,
-                name: 'Thai tea frappe'
-            },
-            {
-                id: 4,
-                name: 'Green tea frappe'
-            }
-        ]
-    },
-    {
-        id: 4,
-        name: 'Smoothie',
-        items: [
-            {
-                id: 1,
-                name: 'Strawberry smoothie yoghurt'
-            },
-            {
-                id: 2,
-                name: 'Lime smoothie'
-            },
-            {
-                id: 3,
-                name: 'Watermelon smoothie'
-            },
-            {
-                id: 4,
-                name: 'Mango smoothie'
-            }
-        ]
-    }
+const checkOutstate = ref(false)
+const giveMoney = ref('0')
+const payOPtion = ref('Cash')
 
-])
+function deleteInput() {
+    if (giveMoney.value.length > 1) {
+        giveMoney.value = giveMoney.value.slice(0, -1)
+    } else {
+        giveMoney.value = '0'
+    }
+}
+function clearInput() {
+    giveMoney.value = '0'
+}
+function inputMoney(num) {
+    if (giveMoney.value === '0') {
+        giveMoney.value = num
+    } else {
+        giveMoney.value += num
+    }
+}
+function addToBill(itemName, price) {
+    const item = bills().find(bill => bill.name === itemName)
+    if (item) {
+        item.amount++
+        item.price += price
+    } else {
+        bills().push(
+            {
+                id: bills().length + 1,
+                name: itemName,
+                price: price,
+                amount: 1
+            }
+        )
+    }
+}
 </script>
 
 <style lang="scss" scoped></style>
