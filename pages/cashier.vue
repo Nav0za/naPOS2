@@ -37,16 +37,16 @@
                     </div>
                     <div class="p-0 grid grid-cols-3">
                         <div class="flex justify-center items-center">
-                            <UButton variant="outline" label="1" class="w-full h-full py-5 justify-center"
-                                @click="inputMoney('1')" />
+                            <UButton variant="outline" label="7" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('7')" />
                         </div>
                         <div class="flex justify-center items-center">
-                            <UButton variant="outline" label="2" class="w-full h-full py-5 justify-center"
-                                @click="inputMoney('2')" />
+                            <UButton variant="outline" label="8" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('8')" />
                         </div>
                         <div class="flex justify-center items-center">
-                            <UButton variant="outline" label="3" class="w-full h-full py-5 justify-center"
-                                @click="inputMoney('3')" />
+                            <UButton variant="outline" label="9" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('9')" />
                         </div>
                         <div class="flex justify-center items-center">
                             <UButton variant="outline" label="4" class="w-full h-full py-5 justify-center"
@@ -61,16 +61,16 @@
                                 @click="inputMoney('6')" />
                         </div>
                         <div class="flex justify-center items-center">
-                            <UButton variant="outline" label="7" class="w-full h-full py-5 justify-center"
-                                @click="inputMoney('7')" />
+                            <UButton variant="outline" label="1" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('1')" />
                         </div>
                         <div class="flex justify-center items-center">
-                            <UButton variant="outline" label="8" class="w-full h-full py-5 justify-center"
-                                @click="inputMoney('8')" />
+                            <UButton variant="outline" label="2" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('2')" />
                         </div>
                         <div class="flex justify-center items-center">
-                            <UButton variant="outline" label="9" class="w-full h-full py-5 justify-center"
-                                @click="inputMoney('9')" />
+                            <UButton variant="outline" label="3" class="w-full h-full py-5 justify-center"
+                                @click="inputMoney('3')" />
                         </div>
                         <div class="flex justify-center items-center">
                             <UButton variant="outline" label="Delete" icon="i-lucide-arrow-left"
@@ -127,6 +127,7 @@ const checkOutstate = ref(false)
 const giveMoney = ref('0')
 const payOPtion = ref('Cash')
 
+// ลบเลขเงินทีละตัว
 function deleteInput() {
     if (giveMoney.value.length > 1) {
         giveMoney.value = giveMoney.value.slice(0, -1)
@@ -134,9 +135,11 @@ function deleteInput() {
         giveMoney.value = '0'
     }
 }
+// เคลียร์เงินให้เป็น 0
 function clearInput() {
     giveMoney.value = '0'
 }
+// เพิ่มตัวเลขเงิน
 function inputMoney(num) {
     if (giveMoney.value === '0') {
         giveMoney.value = num
@@ -144,12 +147,15 @@ function inputMoney(num) {
         giveMoney.value += num
     }
 }
+// เพิ่มสินค้าในบิล
 function addToBill(itemName, price) {
-    const item = bills().find(bill => bill.name === itemName)
+    const item = bills().find(bill => bill.name === itemName) // หาสินค้าในบิลที่มีชื่อเดียวกัน
+    // ถ้ามีสินค้าในบิลแล้ว ให้เพิ่มจำนวนและราคา
     if (item) {
         item.amount++
         item.price += price
     } else {
+        // push object ลงใน state array ชื่อว่า bills
         bills().push(
             {
                 id: bills().length + 1,
@@ -160,8 +166,13 @@ function addToBill(itemName, price) {
         )
     }
 }
+// เปลี่ยนวิธีการชำระเงิน
 function changePayOption(option) {
-    payOPtion.value = option
+    if (payOPtion.value === option) {
+        return // ถ้าเลือกแล้วไม่ต้องทำอะไร
+    }else {
+        payOPtion.value = option // เปลี่ยนวิธีการชำระเงิน
+    }
     clearInput()
 }
 </script>
