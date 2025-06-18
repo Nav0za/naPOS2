@@ -121,11 +121,11 @@
 </template>
 
 <script setup>
-const proDucts = products()
-const cateSelectstate = ref('')
-const checkOutstate = ref(false)
-const giveMoney = ref('0')
-const payOPtion = ref('Cash')
+const proDucts = products() // ดึงข้อมูลสินค้า
+const cateSelectstate = ref('') // สถานะของการเลือกหมวดหมู่สินค้า
+const checkOutstate = ref(false) // สถานะของการชำระเงิน
+const giveMoney = ref('0') // เงินที่ผู้ใช้ใส่เข้ามา
+const payOPtion = ref('Cash') // วิธีการชำระเงิน
 
 // ลบเลขเงินทีละตัว
 function deleteInput() {
